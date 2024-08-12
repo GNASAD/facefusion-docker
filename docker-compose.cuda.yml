@@ -6,6 +6,7 @@ services:
   command: [ 'python', 'run.py', '--execution-providers', 'cuda' ]
   volumes:
   - .assets:/facefusion/.assets
+  - .download:/facefusion/.download
   ports:
   - 7880:7860
   deploy:

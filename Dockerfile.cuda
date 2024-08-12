@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
+FROM nvidia/cuda:12.2.2-cudnn8-runtime-ubuntu22.04
 
 ARG FACEFUSION_VERSION=2.6.1
 ENV GRADIO_SERVER_NAME=0.0.0.0
@@ -14,5 +14,8 @@ RUN apt-get install curl -y
 RUN apt-get install ffmpeg -y
 
 RUN git clone https://github.com/facefusion/facefusion.git --branch ${FACEFUSION_VERSION} --single-branch .
-RUN python install.py --onnxruntime cuda-11.8 --skip-conda
+RUN sed -i 's/PROBABILITY_LIMIT = 0.80/PROBABILITY_LIMIT = 111.0/' ./facefusion/content_analyser.py
+RUN sed -i 's/output_path =/output_path = .download/' ./facefusion.ini
+RUN sed -i 's/face_swapper_pixel_boost =/face_swapper_pixel_boost = 1024x1024/' ./facefusion.ini
+RUN python install.py --onnxruntime cuda-12.2 --skip-conda
 
